@@ -1,0 +1,45 @@
+﻿@page "/bindings"
+@rendermode InteractiveServer
+
+<PageTitle>Bindings</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<ol>
+    @for (var idx = 0; idx < 10; idx++)
+    {
+        <li>El valor es @idx</li>
+    }
+</ol>
+<p>
+<!-- Enlace directo con evento oninput -->
+<input type="text" @bind:event="oninput"  @bind="name" />
+<span>
+    El valor es @name
+
+</span>
+    <input type="button" value="A mayúsculas!" @onclick="() => name = name.ToUpper()" />
+</p>
+<!-- Enlace get/set (sin evento => al perder foco) -->
+<p>
+<input @bind:get="name2" @bind:set="SetName2" />
+<span>
+    El valor es @name2
+</span>
+</p>
+
+@code {
+
+    private int index = 0;
+
+    private string name = "escuela IT";
+    private string name2 = "desarrolloweb";
+
+    async Task SetName2(string v)
+    {
+        // convierte a asteriscos
+        name2 = new string('*', v.Length);
+    }
+
+
+}

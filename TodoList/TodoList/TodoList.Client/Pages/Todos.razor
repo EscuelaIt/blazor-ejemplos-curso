@@ -1,0 +1,28 @@
+﻿@rendermode InteractiveAuto
+@page "/todos"
+@using TodoList.Models
+@inject ITodoService TodoSvc
+
+<PageTitle>Todos</PageTitle>
+
+<h1>Espartan Todo App</h1>
+
+<h2>Todo List</h2>
+
+<TodosList Todos="_todos" OnDoneClicked="MarkTaskDone"></TodosList>
+
+@code
+{
+    private IEnumerable<TodoTask> _todos = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _todos = await TodoSvc.GetAll();
+    }
+
+    private async Task MarkTaskDone(int id)
+    {
+        await TodoSvc.MarkAsDone(id);
+        _todos = await TodoSvc.GetAll();
+    }
+}

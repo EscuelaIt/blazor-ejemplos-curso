@@ -1,0 +1,19 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+This button demonstrates the use of Blazor Interactive Server Render Mode
+
+<button @onclick="Unlocked">Unlock Interactive Render Mode</button>
+
+<span>@unlockmessage</span>
+
+<Weather @rendermode="InteractiveServer" />
+
+@code {
+    string unlockmessage = "";
+    void Unlocked()
+    {
+        unlockmessage = "Interactive Render Mode Unlocked";
+    }
+}

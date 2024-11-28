@@ -1,0 +1,70 @@
+﻿@page "/"
+@using BlazorApp1.Viewmodels
+@rendermode InteractiveServer
+    
+<PageTitle>Home</PageTitle>
+
+<h1>Forecasts</h1>
+
+Welcome to your new app.
+
+<EditForm Model="Forecast">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <InputDate @bind-Value="Forecast.Date"></InputDate>
+    <InputNumber @bind-Value="Forecast.Celsius"></InputNumber>
+    <InputText @bind-Value="Forecast.Summary"></InputText>
+    <ValidationMessage For="() => Forecast.Summary"></ValidationMessage>
+    <ValidationSummary></ValidationSummary>
+   
+</EditForm>
+
+<p>
+    El valor en Farenheits es @Forecast.Farenheit
+</p>
+
+<h2>Usando EditContext</h2>
+
+<EditForm EditContext="EditContext">
+    <InputDate @bind-Value="Forecast.Date"></InputDate>
+    <InputNumber @bind-Value="Forecast.Celsius"></InputNumber>
+    <InputText @bind-Value="Forecast.Summary"></InputText>
+    <input type="submit" value="Submit" />
+
+    <ValidationSummary></ValidationSummary>
+
+</EditForm>
+
+@code
+{
+    private WeatherForecast Forecast { get; set; } = new();
+    private EditContext EditContext { get; set; }
+    private ValidationMessageStore? MessageStore;
+
+    protected override void OnInitialized()
+    {
+        EditContext = new EditContext(Forecast);
+        EditContext.EnableDataAnnotationsValidation();
+        MessageStore = new ValidationMessageStore(EditContext);
+        EditContext.OnValidationRequested += OnValidateForm;
+        EditContext.OnFieldChanged += OnFieldChangedValidate;
+    }
+
+    private void OnFieldChangedValidate(object? sender, FieldChangedEventArgs e)
+    {
+        int i = 0;
+    }
+
+    private void OnValidateForm(object? sender, ValidationRequestedEventArgs e)
+    {
+        MessageStore?.Clear();
+
+        // Validaciones cruzadas aquí
+
+        if (Forecast.Celsius == 0 && !Forecast.Summary.StartsWith("Z"))
+        {
+            MessageStore?.Add(() => Forecast.Summary, "Must start with Z if Celisus is Zero");
+            EditContext?.NotifyValidationStateChanged();
+        }
+    }
+
+}

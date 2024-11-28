@@ -1,0 +1,31 @@
+﻿@rendermode  InteractiveServer
+@page "/users"
+
+<h3>Users</h3>
+
+<UserList Users="_users">
+    <ItemTemplate Context="user">
+        <li>@user.Name - @user.Surname</li>
+    </ItemTemplate>
+    <EmptyTemplate>
+        <div>No users found</div>
+    </EmptyTemplate>
+</UserList>
+
+<h2>Using Generic List</h2>
+
+<GenericList Items="_users" TItem="UserModel">
+
+</GenericList>
+
+
+@code {
+    private readonly List<UserModel> _users = [];
+
+    protected override void OnInitialized()
+    {
+        _users.Add(new UserModel(1, "Fulanito", "Menganito"));
+        _users.Add(new UserModel(2, "Jon", "Doe"));
+    }
+
+}

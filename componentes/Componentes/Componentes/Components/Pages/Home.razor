@@ -1,0 +1,28 @@
+﻿@page "/"
+@using Componentes.Components.Layout
+@rendermode InteractiveServer
+@layout SimpleLayout
+
+<h3>Home</h3>
+
+<Counter CurrentCount="value" OnCurrentCountUpdated="OnContadorUpdated"></Counter>
+
+<p>
+    El valor de name es @name
+</p>
+
+@code {
+    private int value = 42;
+    private string name = "valor inicial";
+
+    /*
+    private void OnContadorPar()
+    {
+        name = "El contador es par!";
+    }
+    */
+    private void OnContadorUpdated(int newValue)
+    {
+        name = newValue.ToString();
+    }
+}

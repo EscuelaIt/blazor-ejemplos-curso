@@ -1,0 +1,34 @@
+﻿@rendermode  InteractiveServer
+
+@if (Todos is not null)
+{
+    <table>
+        @foreach (var todo in Todos)
+        {
+            if (!todo.IsDone)
+            {
+                <tr>
+                    <td>
+                        @todo.Text
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary" @onclick="async () => await DoneClicked(todo.Id)" >Mark as Done</button>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+}
+
+
+@code {
+    [Parameter]
+    public IEnumerable<TodoTask>?  Todos { get; set; }
+
+    [Parameter] public EventCallback<int> OnDoneClicked { get; set; }
+
+    private async Task DoneClicked(int id)
+    {
+        await OnDoneClicked.InvokeAsync(id);
+    }
+}

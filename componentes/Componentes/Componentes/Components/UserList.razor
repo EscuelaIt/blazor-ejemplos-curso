@@ -1,0 +1,23 @@
+﻿@rendermode InteractiveServer
+
+<h3>UserList</h3>
+
+@if (Users.Any())
+{
+    @foreach (var user in Users)
+    {
+        @ItemTemplate(user)
+    }
+}
+else
+{
+   @EmptyTemplate
+}
+
+
+@code {
+    [Parameter] public IEnumerable<UserModel> Users { get; set; }
+    [Parameter] public RenderFragment<UserModel> ItemTemplate { get; set; }
+    [Parameter] public RenderFragment EmptyTemplate { get; set; }
+
+}

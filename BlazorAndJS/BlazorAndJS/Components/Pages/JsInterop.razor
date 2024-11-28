@@ -1,0 +1,63 @@
+﻿@page "/jsinterop"
+@inject LocalStorageService LocalStorage
+@inject IHttpContextAccessor HttpContextAccessor
+@rendermode InteractiveServer
+
+<PageTitle>Local Storage Demo!!!</PageTitle>
+
+<h3>Local Storage Demo!!!</h3>
+
+<button @onclick="SetItem">Set Item</button>
+<button @onclick="GetItem">Get Item</button>
+<button @onclick="RemoveItem">Remove Item</button>
+<button @onclick="Clear">Clear</button>
+
+
+<p></p>
+
+<input type="text" @bind="localValue" />
+
+@code {
+
+    private string localValue = "";
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+    private bool isPreRendering;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isPreRendering = HttpContext?.RequestServices.GetService(typeof(IHttpContextAccessor)) != null;
+        if (!isPreRendering)
+        {
+            await GetItem();
+        }
+        await base.OnInitializedAsync();
+
+    }
+    
+
+    private async Task SetItem()
+    {
+        if (!string.IsNullOrEmpty(localValue))
+        {
+            await LocalStorage.SetItemAsync("exampleKey", localValue);
+        }
+    }
+
+    private async Task GetItem()
+    {
+        var value = await LocalStorage.GetItemAsync("exampleKey");
+        localValue = value;
+    }
+
+    private async Task RemoveItem()
+    {
+        await LocalStorage.RemoveItemAsync("exampleKey");
+        localValue = "";
+    }
+
+    private async Task Clear()
+    {
+        await LocalStorage.ClearAsync();
+        localValue = "";
+    }
+}

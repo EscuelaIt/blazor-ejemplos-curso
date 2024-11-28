@@ -1,0 +1,48 @@
+﻿@rendermode InteractiveServer
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @localCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+
+    [Parameter]
+    public int CurrentCount { get; set; }
+
+    private int localCount = 0;
+
+    protected override void OnParametersSet()
+    {
+        if (localCount == 0)
+        {
+            localCount = CurrentCount;
+        }
+    }
+
+    /*
+    [Parameter]
+    public EventCallback OnCurrentCountPar { get; set; }
+
+    private async Task IncrementCount()
+    {
+        CurrentCount++;
+        if (CurrentCount % 2 == 0)
+        {
+            await OnCurrentCountPar.InvokeAsync();
+        }
+    }
+    */
+
+    [Parameter]
+    public EventCallback<int> OnCurrentCountUpdated { get; set; }
+
+    private async Task IncrementCount()
+    {
+        localCount++;
+        await OnCurrentCountUpdated.InvokeAsync(localCount);
+    }
+}
